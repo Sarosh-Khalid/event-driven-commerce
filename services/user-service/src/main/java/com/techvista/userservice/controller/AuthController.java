@@ -5,6 +5,7 @@ import com.techvista.userservice.dto.LoginRequest;
 import com.techvista.userservice.dto.RegisterRequest;
 import com.techvista.userservice.service.AuthService;
 import com.techvista.userservice.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class AuthController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(
+            @Valid
             @RequestBody RegisterRequest request) {
 
         service.register(request);
