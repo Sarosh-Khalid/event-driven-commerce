@@ -1,2 +1,6 @@
-package com.techvista.userservice.dto;public class AuthResponse {
+package com.techvista.userservice.dto;
+
+public record AuthResponse(
+        String token
+) {
 }

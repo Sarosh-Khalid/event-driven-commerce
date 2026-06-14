@@ -1,2 +1,7 @@
-package com.techvista.userservice.dto;public class LoginRequest {
+package com.techvista.userservice.dto;
+
+public record LoginRequest(
+        String email,
+        String password
+) {
 }
