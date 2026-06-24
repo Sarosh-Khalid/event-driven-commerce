@@ -6,7 +6,8 @@ public interface InventoryService {
 
     void processOrder(
             Long productId,
-            Integer quantity
+            Integer quantity,
+            Long orderId
     );
 
 }

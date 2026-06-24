@@ -2,6 +2,8 @@ package com.techvista.inventoryservice.service;
 
 
 import com.techvista.inventoryservice.entity.Inventory;
+import com.techvista.inventoryservice.kafka.InventoryEventProducer;
+import com.techvista.inventoryservice.kafka.InventoryUpdatedEvent;
 import com.techvista.inventoryservice.repository.InventoryRepository;
 
 
@@ -19,50 +21,54 @@ public class InventoryServiceImpl
 
 
     private final InventoryRepository repository;
+    private final InventoryEventProducer producer;
 
 
 
     @Override
     public void processOrder(
             Long productId,
-            Integer quantity) {
-
+            Integer quantity,
+            Long orderId) {
 
 
         Inventory inventory =
                 repository.findByProductId(productId)
                         .orElseThrow(
                                 () -> new RuntimeException(
-                                        "Inventory not found"
-                                )
+                                        "Inventory not found")
                         );
 
 
 
-        if(inventory.getAvailableQuantity()
-                < quantity){
+        boolean available =
+                inventory.getAvailableQuantity()
+                        >= quantity;
 
 
-            throw new RuntimeException(
-                    "Insufficient stock"
+
+        if(available){
+
+            inventory.setAvailableQuantity(
+                    inventory.getAvailableQuantity()
+                            - quantity
             );
+
+            repository.save(inventory);
 
         }
 
 
 
-        inventory.setAvailableQuantity(
-                inventory.getAvailableQuantity()
-                        - quantity
-        );
+        producer.publish(
 
+                new InventoryUpdatedEvent(
+                        orderId,
+                        productId,
+                        quantity,
+                        available
+                )
 
-        repository.save(inventory);
-
-
-
-        System.out.println(
-                "Inventory updated"
         );
 
 

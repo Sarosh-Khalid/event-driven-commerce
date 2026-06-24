@@ -40,7 +40,8 @@ public class OrderConsumer {
 
         service.processOrder(
                 event.productId(),
-                event.quantity()
+                event.quantity(),
+                event.orderId()
         );
 
 
