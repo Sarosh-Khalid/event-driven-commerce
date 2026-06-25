@@ -26,7 +26,7 @@ public class PaymentServiceImpl
 
 
     @Override
-    public void processPayment(
+    public Payment processPayment(
             InventoryUpdatedEvent event) {
 
 
@@ -55,7 +55,7 @@ public class PaymentServiceImpl
         System.out.println(
                 "Payment processed"
         );
-
+        return payment;
 
     }
 
